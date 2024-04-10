@@ -1,5 +1,6 @@
 package com.blog.controller;
 
+import com.blog.dto.BlogDTO;
 import com.blog.dto.BlogListRequest;
 import com.blog.dto.BlogVO;
 import com.blog.entity.Blog;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +47,20 @@ public class BlogController {
     }
 
     @PostMapping("/blogs")
-    public R<?> saveOrUpdateBlog(@RequestBody Blog blog) {
-        /*Blog savedBlog = */
-        blogService.saveOrUpdateBlog(blog);
-//        BlogVO blogVO = modelMapper.map(savedBlog, BlogVO.class);
-        return R.ok(null);
+    public R<?> addOrUpdateBlog(@Valid @RequestBody BlogDTO blogDTO) {
+        Blog blog = modelMapper.map(blogDTO, Blog.class);
+
+        if (blog.getId() == null) {
+            blog.setCreatedTime(new Date());
+        }
+        blog.setUpdatedTime(new Date());
+
+        Blog savedBlog = blogService.save(blog);
+        if (savedBlog != null) {
+            return R.ok(null); // 无需返回数据
+        } else {
+            return R.fail(500, "操作失败");
+        }
     }
 
 }

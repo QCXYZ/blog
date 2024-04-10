@@ -2,13 +2,14 @@ package com.blog.service;
 
 import com.blog.entity.Blog;
 import com.blog.repository.BlogRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
+@Slf4j
 @Service
 public class BlogService {
     @Resource
@@ -27,12 +28,8 @@ public class BlogService {
         }
     }
 
-    public void saveOrUpdateBlog(Blog blog) {
-        blog.setUpdatedTime(new Date());
-        if (blog.getId() == null) {
-            blog.setCreatedTime(new Date());
-        }
-        blogRepository.save(blog);
+    public Blog save(Blog blog) {
+        return blogRepository.save(blog);
     }
 
 }
