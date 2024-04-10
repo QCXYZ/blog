@@ -1,6 +1,8 @@
 package com.blog.service;
 
 import com.blog.entity.Blog;
+import com.blog.entity.Type;
+import com.blog.exception.NotFoundException;
 import com.blog.repository.BlogRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -11,11 +13,13 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.persistence.criteria.Predicate;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
+@Transactional
 public class BlogService {
     @Resource
     private BlogRepository blogRepository;
@@ -34,6 +38,10 @@ public class BlogService {
     }
 
     public Blog save(Blog blog) {
+        if (blog.getType() == null) {
+            blog.setType(new Type(0L, "未分类"));
+        }
+
         return blogRepository.save(blog);
     }
 
@@ -49,4 +57,9 @@ public class BlogService {
         }, pageable);
     }
 
+    public void deleteBlog(Long id) {
+        Blog blog = blogRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("博客不存在"));
+        blogRepository.delete(blog);
+    }
 }

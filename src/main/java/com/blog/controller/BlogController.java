@@ -72,4 +72,10 @@ public class BlogController {
         }
     }
 
+    @GetMapping("/{id}/delete")
+    public R<?> deleteBlog(@PathVariable Long id) {
+        blogService.deleteBlog(id);
+        return R.ok("博客删除成功");
+    }
+
 }
