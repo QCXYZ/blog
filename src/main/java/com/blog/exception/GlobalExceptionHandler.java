@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
     // 打印堆栈信息至日志
     private static void log(Exception e, HttpServletRequest request) {
         log.error("请求地址：{}", request.getRequestURI());
