@@ -5,9 +5,14 @@ import com.blog.repository.BlogRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -30,6 +35,18 @@ public class BlogService {
 
     public Blog save(Blog blog) {
         return blogRepository.save(blog);
+    }
+
+    public Page<Blog> searchBlogs(String query, Pageable pageable) {
+        return blogRepository.findAll((Specification<Blog>) (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (query != null && !query.isEmpty()) {
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.like(root.get("title"), "%" + query + "%"),
+                        criteriaBuilder.like(root.get("content"), "%" + query + "%")));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        }, pageable);
     }
 
 }

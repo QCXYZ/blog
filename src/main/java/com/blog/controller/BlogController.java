@@ -9,10 +9,8 @@ import com.blog.service.BlogService;
 import com.blog.util.R;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -60,6 +58,17 @@ public class BlogController {
             return R.ok(null); // 无需返回数据
         } else {
             return R.fail(500, "操作失败");
+        }
+    }
+
+    @GetMapping("/search")
+    public R<?> searchBlogs(@RequestParam String query, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        try {
+            Page<Blog> blogsPage = blogService.searchBlogs(query, PageRequest.of(page, size));
+            // 转换blogsPage为所需的格式，如果有必要 (这里没需要)
+            return R.ok(blogsPage.getContent()); // 这里简化了转换和响应结构的处理
+        } catch (Exception e) {
+            return R.fail(500, "搜索过程中发生错误");
         }
     }
 
