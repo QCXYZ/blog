@@ -7,6 +7,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, Long> {
     Page<Blog> findByTitleContainingAndTypeId(String title, Long typeId, Pageable pageable);
@@ -16,4 +18,6 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
     Page<Blog> findByTypeId(Long typeId, Pageable pageable);
 
     Page<Blog> findAll(Specification<Blog> blogSpecification, Pageable pageable);
+
+    List<Blog> findByTypeId(Long typeId);
 }
