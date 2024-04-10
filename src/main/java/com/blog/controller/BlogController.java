@@ -19,14 +19,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("admin")
 public class BlogController {
     @Resource
     private BlogService blogService;
     @Resource
     private ModelMapper modelMapper;
 
-    @PostMapping("/getBlogList")
+    @PostMapping("getBlogList")
     public R<?> getBlogList(@RequestBody BlogListRequest request) {
         Page<Blog> page = blogService.listBlogs(request.getPagenum(), request.getPagesize(), request.getTypeId(), request.getTitle());
         if (page != null) {
@@ -44,7 +44,7 @@ public class BlogController {
         }
     }
 
-    @PostMapping("/blogs")
+    @PostMapping("blogs")
     public R<?> addOrUpdateBlog(@Valid @RequestBody BlogDTO blogDTO) {
         Blog blog = modelMapper.map(blogDTO, Blog.class);
 
@@ -61,7 +61,7 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/search")
+    @GetMapping("search")
     public R<?> searchBlogs(@RequestParam String query, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         try {
             Page<Blog> blogsPage = blogService.searchBlogs(query, PageRequest.of(page, size));
@@ -72,7 +72,7 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/{id}/delete")
+    @GetMapping("{id}/delete")
     public R<?> deleteBlog(@PathVariable Long id) {
         blogService.deleteBlog(id);
         return R.ok("博客删除成功");
