@@ -47,7 +47,6 @@ public class BlogController {
     public R<?> saveOrUpdateBlog(@RequestBody Blog blog) {
         /*Blog savedBlog = */
         blogService.saveOrUpdateBlog(blog);
-
 //        BlogVO blogVO = modelMapper.map(savedBlog, BlogVO.class);
         return R.ok(null);
     }
