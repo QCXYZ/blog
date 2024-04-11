@@ -20,4 +20,9 @@ public class R<T> {
     public static <T> R<T> fail(int code, String message) {
         return new R<>(false, code, message, null);
     }
+
+    // 新增的方法，接收 EE 类型的参数
+    public static <T> R<T> fail(EE ee) {
+        return new R<>(false, ee.getErrorCode(), ee.getErrorMessage(), null);
+    }
 }
