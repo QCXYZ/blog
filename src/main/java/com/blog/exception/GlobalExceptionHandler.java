@@ -21,9 +21,9 @@ public class GlobalExceptionHandler {
             return R.fail(EE.不支持的媒体类型);
         } else if (e instanceof AccessDeniedException) {
             return R.fail(EE.访问被拒绝);
+        } else if (e instanceof IllegalArgumentException) {
+            return R.fail(400, e.getMessage());
         } else if (e instanceof ArithmeticException) {
-//            return R.fail(EE.数学运算异常);
-            // 这个地方不使用EE,需要返回错误码和错误信息
             return R.fail(500, "数学运算异常");
         } else {
             return R.fail(EE.服务器内部错误);
